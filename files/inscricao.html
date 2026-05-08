@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acampax — Inscrição</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --verde: #00e676;
+      --verde-escuro: #00b34a;
+      --preto: #080f0a;
+      --escuro: #0d1a12;
+      --card: #111e16;
+      --card2: #162012;
+      --texto: #e8f5eb;
+      --cinza: #7a9480;
+      --borda: rgba(0,230,118,0.15);
+      --erro: #ff5252;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--preto);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--borda);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    header a { color: var(--cinza); text-decoration: none; font-size: 0.9rem; }
+    header a:hover { color: var(--verde); }
+    header .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--verde);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 3rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--verde);
+      margin-bottom: 0.5rem;
+    }
+    .page-sub { color: var(--cinza); font-size: 0.95rem; margin-bottom: 2.5rem; }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2.5rem;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(255,255,255,0.08);
+      font-size: 0.8rem;
+      color: var(--cinza);
+      transition: all 0.3s;
+    }
+    .step.active {
+      border-bottom-color: var(--verde);
+      color: var(--verde);
+      font-weight: 600;
+    }
+    .step.done {
+      border-bottom-color: var(--verde-escuro);
+      color: var(--verde-escuro);
+    }
+
+    /* FORM SECTIONS */
+    .form-section { display: none; }
+    .form-section.active { display: block; animation: slideIn 0.35s ease; }
+
+    @keyframes slideIn {
+      from { opacity:0; transform: translateX(20px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--cinza);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    label span.req { color: var(--verde); margin-left: 3px; }
+
+    input, select, textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--borda);
+      border-radius: 10px;
+      color: var(--texto);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--verde);
+      box-shadow: 0 0 0 3px rgba(0,230,118,0.1);
+    }
+    select { appearance: none; cursor: pointer; }
+    input[type="file"] { padding: 0.5rem; cursor: pointer; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* MENOR DE IDADE */
+    .menor-bloco {
+      background: var(--card2);
+      border: 1px solid rgba(255,200,0,0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+    .menor-bloco.visivel { display: block; animation: slideIn 0.3s ease; }
+    .menor-bloco h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffd740;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* LGPD */
+    .lgpd-box {
+      background: var(--card);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--cinza);
+      line-height: 1.7;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: var(--verde);
+      margin-top: 2px;
+    }
+    .checkbox-row span { font-size: 0.9rem; color: var(--texto); line-height: 1.5; }
+
+    /* UPLOAD */
+    .upload-area {
+      border: 2px dashed var(--borda);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .upload-area:hover { border-color: var(--verde); background: rgba(0,230,118,0.04); }
+    .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-area .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .upload-area p { font-size: 0.85rem; color: var(--cinza); }
+    .upload-area .file-name { color: var(--verde); font-weight: 500; margin-top: 0.5rem; font-size: 0.85rem; }
+
+    /* PAGAMENTO */
+    .payment-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .payment-opt {
+      border: 1.5px solid var(--borda);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+      color: var(--cinza);
+    }
+    .payment-opt .emoji { font-size: 1.5rem; display: block; margin-bottom: 0.4rem; }
+    .payment-opt.selected {
+      border-color: var(--verde);
+      background: rgba(0,230,118,0.08);
+      color: var(--verde);
+      font-weight: 600;
+    }
+
+    /* NAVIGATION */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .btn-back {
+      flex: 1;
+      padding: 0.85rem;
+      background: transparent;
+      border: 1.5px solid var(--borda);
+      color: var(--cinza);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: var(--verde); color: var(--verde); }
+    .btn-next {
+      flex: 2;
+      padding: 0.85rem;
+      background: var(--verde);
+      color: var(--preto);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-next:hover { background: #fff; transform: translateY(-1px); }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ERRO / SUCESSO */
+    .msg-erro {
+      background: rgba(255,82,82,0.1);
+      border: 1px solid rgba(255,82,82,0.3);
+      color: var(--erro);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .msg-erro.visivel { display: block; animation: slideIn 0.3s; }
+
+    /* SUCESSO FINAL */
+    .sucesso-box {
+      text-align: center;
+      padding: 3rem 2rem;
+      display: none;
+    }
+    .sucesso-box.visivel { display: block; animation: slideIn 0.4s ease; }
+    .sucesso-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .sucesso-box h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--verde);
+      margin-bottom: 0.75rem;
+    }
+    .sucesso-box p { color: var(--cinza); line-height: 1.7; margin-bottom: 1.5rem; }
+    .sucesso-box .btn-pagar {
+      display: inline-block;
+      background: var(--verde);
+      color: var(--preto);
+      font-weight: 700;
+      padding: 0.9rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .sucesso-box .btn-pagar:hover { background: #fff; }
+
+    @media (max-width: 600px) {
+      .row-2 { grid-template-columns: 1fr; }
+      .payment-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html">← Voltar</a>
+  <span class="logo">Acampax</span>
+</header>
+
+<div class="container">
+  <h1 class="page-title">Inscrição</h1>
+  <p class="page-sub">Preencha os dados para garantir sua vaga no acampamento.</p>
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step active" id="step-1">1 · Dados pessoais</div>
+    <div class="step" id="step-2">2 · Documentos</div>
+    <div class="step" id="step-3">3 · Pagamento</div>
+    <div class="step" id="step-4">4 · Confirmação</div>
+  </div>
+
+  <div class="msg-erro" id="msg-erro"></div>
+
+  <!-- STEP 1 — DADOS PESSOAIS -->
+  <div class="form-section active" id="secao-1">
+    <div class="row-2">
+      <div class="field-group">
+        <label>Nome completo <span class="req">*</span></label>
+        <input type="text" id="nome" placeholder="Seu nome completo" />
+      </div>
+      <div class="field-group">
+        <label>Idade <span class="req">*</span></label>
+        <input type="number" id="idade" placeholder="Ex: 17" min="1" max="99" />
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field-group">
+        <label>E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" />
+      </div>
+      <div class="field-group">
+        <label>Telefone / WhatsApp</label>
+        <input type="tel" id="telefone" placeholder="(11) 99999-9999" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Cidade</label>
+      <input type="text" id="cidade" placeholder="Sua cidade" />
+    </div>
+
+    <!-- MENOR DE IDADE -->
+    <div class="menor-bloco" id="menor-bloco">
+      <h3>⚠️ Responsável legal (menor de 18 anos)</h3>
+      <div class="field-group">
+        <label>Nome do responsável <span class="req">*</span></label>
+        <input type="text" id="resp-nome" placeholder="Nome completo do responsável" />
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>RG do responsável <span class="req">*</span></label>
+          <input type="text" id="resp-rg" placeholder="XX.XXX.XXX-X" />
+        </div>
+        <div class="field-group">
+          <label>Telefone do responsável</label>
+          <input type="tel" id="resp-tel" placeholder="(11) 99999-9999" />
+        </div>
+      </div>
+    </div>
+
+    <!-- LGPD -->
+    <div class="field-group" style="margin-top:1.5rem;">
+      <div class="lgpd-box">
+        <strong>Política de Privacidade e LGPD</strong><br/><br/>
+        Ao se inscrever no Acampax, você concorda com o tratamento dos seus dados pessoais
+        conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018). Seus dados serão
+        utilizados exclusivamente para fins de inscrição, controle de pagamento e organização
+        do evento. Não compartilhamos suas informações com terceiros sem o seu consentimento.
+        Os dados serão armazenados de forma segura e excluídos após o encerramento do evento,
+        salvo obrigação legal em contrário. Você tem o direito de solicitar acesso, correção
+        ou exclusão dos seus dados a qualquer momento.
+      </div>
+      <label class="checkbox-row">
+        <input type="checkbox" id="lgpd" />
+        <span>Li e aceito a Política de Privacidade e autorizo o tratamento dos meus dados pessoais.</span>
+      </label>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-next" onclick="irPara(2)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 — DOCUMENTOS -->
+  <div class="form-section" id="secao-2">
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:1.5rem;">
+      Envie uma foto do seu documento de identificação (RG, CNH ou equivalente).
+    </p>
+    <div class="field-group">
+      <label>Documento — Frente</label>
+      <div class="upload-area" id="area-frente">
+        <input type="file" id="doc-frente" accept="image/*,application/pdf" onchange="mostrarNome(this,'area-frente')" />
+        <div class="icon">📄</div>
+        <p>Clique ou arraste para enviar</p>
+        <p>PNG, JPG, JPEG, PDF — até 16 MB</p>
+        <div class="file-name" id="nome-frente"></div>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:1rem;">
+      <label>Documento — Verso</label>
+      <div class="upload-area" id="area-verso">
+        <input type="file" id="doc-verso" accept="image/*,application/pdf" onchange="mostrarNome(this,'area-verso')" />
+        <div class="icon">📄</div>
+        <p>Clique ou arraste para enviar</p>
+        <p>PNG, JPG, JPEG, PDF — até 16 MB</p>
+        <div class="file-name" id="nome-verso"></div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="irPara(1)">← Voltar</button>
+      <button class="btn-next" onclick="irPara(3)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 — PAGAMENTO -->
+  <div class="form-section" id="secao-3">
+    <div class="field-group">
+      <label>Forma de pagamento <span class="req">*</span></label>
+      <div class="payment-options">
+        <div class="payment-opt selected" data-valor="pix" onclick="selecionarPagamento(this)">
+          <span class="emoji">⚡</span>Pix
+        </div>
+        <div class="payment-opt" data-valor="cartao" onclick="selecionarPagamento(this)">
+          <span class="emoji">💳</span>Cartão
+        </div>
+        <div class="payment-opt" data-valor="boleto" onclick="selecionarPagamento(this)">
+          <span class="emoji">🏦</span>Boleto
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group" id="parcelas-grupo">
+      <label>Parcelas</label>
+      <select id="parcelas">
+        <option value="1">1x à vista</option>
+        <option value="2">2x</option>
+        <option value="3">3x</option>
+        <option value="6">6x</option>
+        <option value="12">12x</option>
+      </select>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--borda);border-radius:12px;padding:1.25rem;margin-top:1rem;">
+      <p style="font-size:0.85rem;color:var(--cinza);margin-bottom:0.5rem;">Valor da inscrição</p>
+      <p style="font-size:2rem;font-family:'Bebas Neue',sans-serif;color:var(--verde);" id="valor-display">R$ 150,00</p>
+      <p style="font-size:0.8rem;color:var(--cinza);">O link de pagamento será gerado após o envio do formulário.</p>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="irPara(2)">← Voltar</button>
+      <button class="btn-next" onclick="enviarFormulario()" id="btn-enviar">Confirmar inscrição</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 — SUCESSO -->
+  <div class="form-section" id="secao-4">
+    <div class="sucesso-box visivel">
+      <div class="sucesso-icon">🎉</div>
+      <h2>Inscrição realizada!</h2>
+      <p id="sucesso-msg">Sua inscrição foi registrada com sucesso. Agora clique no botão abaixo para realizar o pagamento pelo Mercado Pago.</p>
+      <a href="#" class="btn-pagar" id="btn-pagar" target="_blank">Pagar agora →</a>
+      <br/><br/>
+      <a href="index.html" style="color:var(--cinza);font-size:0.85rem;text-decoration:none;">Voltar ao início</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API = 'http://localhost:5000/api';
+  let participanteId = null;
+  let formaPagamento = 'pix';
+  let stepAtual = 1;
+
+  // Detecção de menor de idade
+  document.getElementById('idade').addEventListener('input', function() {
+    const bloco = document.getElementById('menor-bloco');
+    const idade = parseInt(this.value);
+    if (idade > 0 && idade < 18) {
+      bloco.classList.add('visivel');
+    } else {
+      bloco.classList.remove('visivel');
+    }
+  });
+
+  // Pagamento parcelas
+  function selecionarPagamento(el) {
+    document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    formaPagamento = el.dataset.valor;
+    const parcelasGrupo = document.getElementById('parcelas-grupo');
+    parcelasGrupo.style.display = formaPagamento === 'cartao' ? 'block' : 'none';
+  }
+  document.getElementById('parcelas-grupo').style.display = 'none';
+
+  // Nomes dos arquivos
+  function mostrarNome(input, areaId) {
+    const area = document.getElementById(areaId);
+    const nomeEl = area.querySelector('.file-name');
+    nomeEl.textContent = input.files[0]?.name || '';
+  }
+
+  function mostrarErro(msg) {
+    const el = document.getElementById('msg-erro');
+    el.textContent = msg;
+    el.classList.add('visivel');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => el.classList.remove('visivel'), 5000);
+  }
+
+  function irPara(step) {
+    if (step === 2 && !validarStep1()) return;
+
+    document.getElementById(`secao-${stepAtual}`).classList.remove('active');
+    document.getElementById(`step-${stepAtual}`).classList.remove('active');
+    document.getElementById(`step-${stepAtual}`).classList.add('done');
+
+    stepAtual = step;
+    document.getElementById(`secao-${step}`).classList.add('active');
+    document.getElementById(`step-${step}`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function validarStep1() {
+    const nome = document.getElementById('nome').value.trim();
+    const idade = parseInt(document.getElementById('idade').value);
+    const lgpd = document.getElementById('lgpd').checked;
+
+    if (!nome) { mostrarErro('Nome é obrigatório.'); return false; }
+    if (!idade || idade < 1) { mostrarErro('Idade é obrigatória.'); return false; }
+    if (!lgpd) { mostrarErro('Você precisa aceitar a Política de Privacidade.'); return false; }
+
+    if (idade < 18) {
+      const respNome = document.getElementById('resp-nome').value.trim();
+      const respRg = document.getElementById('resp-rg').value.trim();
+      if (!respNome) { mostrarErro('Nome do responsável é obrigatório para menores.'); return false; }
+      if (!respRg) { mostrarErro('RG do responsável é obrigatório.'); return false; }
+    }
+
+    return true;
+  }
+
+  async function enviarFormulario() {
+    const btn = document.getElementById('btn-enviar');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const idade = parseInt(document.getElementById('idade').value);
+    const menor = idade < 18;
+
+    const dados = {
+      nome: document.getElementById('nome').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      idade: idade,
+      cidade: document.getElementById('cidade').value.trim(),
+      telefone: document.getElementById('telefone').value.trim(),
+      lgpd_aceito: document.getElementById('lgpd').checked,
+      forma_pagamento: formaPagamento,
+      parcelas: parseInt(document.getElementById('parcelas').value),
+      responsavel_nome: menor ? document.getElementById('resp-nome').value.trim() : null,
+      responsavel_rg: menor ? document.getElementById('resp-rg').value.trim() : null,
+      responsavel_telefone: menor ? document.getElementById('resp-tel').value.trim() : null,
+    };
+
+    try {
+      // 1. Criar inscrição
+      const res = await fetch(`${API}/inscricao/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      });
+      const json = await res.json();
+
+      if (!res.ok) {
+        mostrarErro(json.erro || 'Erro ao criar inscrição.');
+        btn.disabled = false;
+        btn.textContent = 'Confirmar inscrição';
+        return;
+      }
+
+      participanteId = json.id;
+
+      // 2. Upload de documentos (se houver)
+      const frente = document.getElementById('doc-frente').files[0];
+      const verso = document.getElementById('doc-verso').files[0];
+      if (frente || verso) {
+        const fd = new FormData();
+        if (frente) fd.append('frente', frente);
+        if (verso) fd.append('verso', verso);
+        await fetch(`${API}/documentos/upload/${participanteId}`, { method: 'POST', body: fd });
+      }
+
+      // 3. Criar preferência de pagamento
+      const resPag = await fetch(`${API}/pagamento/criar/${participanteId}`, { method: 'POST' });
+      const pag = await resPag.json();
+
+      // 4. Ir para sucesso
+      irPara(4);
+
+      document.getElementById('sucesso-msg').textContent =
+        `Inscrição #${participanteId} criada para ${dados.nome}. ` +
+        (menor ? 'Como você é menor de idade, o responsável precisa assinar a autorização. ' : '') +
+        'Clique no botão abaixo para finalizar o pagamento.';
+
+      const linkPag = pag.sandbox_init_point || pag.init_point;
+      if (linkPag) {
+        document.getElementById('btn-pagar').href = linkPag;
+      } else {
+        document.getElementById('btn-pagar').textContent = 'Pagamento não configurado';
+        document.getElementById('btn-pagar').style.opacity = '0.5';
+      }
+
+    } catch (err) {
+      mostrarErro('Erro de conexão com o servidor. Verifique se o backend está rodando.');
+      btn.disabled = false;
+      btn.textContent = 'Confirmar inscrição';
+    }
+  }
+</script>
+
+</body>
+</html>

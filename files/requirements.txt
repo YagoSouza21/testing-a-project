@@ -1,0 +1,7 @@
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+mercadopago
+reportlab
+python-dotenv
+Werkzeug

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acampax — Inscrições</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --verde: #00e676;
+      --verde-escuro: #00b34a;
+      --preto: #080f0a;
+      --escuro: #0d1a12;
+      --card: #111e16;
+      --texto: #e8f5eb;
+      --cinza: #7a9480;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--preto);
+      color: var(--texto);
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,230,118,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,179,74,0.08) 0%, transparent 60%),
+        var(--preto);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,230,118,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,230,118,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0,230,118,0.12);
+      border: 1px solid rgba(0,230,118,0.3);
+      color: var(--verde);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 12rem);
+      letter-spacing: 0.02em;
+      line-height: 0.9;
+      color: var(--verde);
+      text-shadow: 0 0 80px rgba(0,230,118,0.3);
+      animation: fadeDown 0.7s 0.1s ease both;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--cinza);
+      max-width: 480px;
+      margin: 1.5rem auto 0;
+      line-height: 1.6;
+      font-weight: 300;
+      animation: fadeDown 0.7s 0.2s ease both;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+      animation: fadeDown 0.7s 0.3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--verde);
+      color: var(--preto);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,230,118,0.4);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      border: 1.5px solid rgba(0,230,118,0.4);
+      color: var(--verde);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0,230,118,0.08);
+      border-color: var(--verde);
+    }
+
+    /* ── INFO CARDS ── */
+    .info-section {
+      padding: 5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--verde);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--texto);
+      margin-bottom: 3rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0,230,118,0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(0,230,118,0.3);
+      transform: translateY(-4px);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--texto);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--cinza);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem;
+      text-align: center;
+      color: var(--cinza);
+      font-size: 0.85rem;
+    }
+
+    /* ── WHATSAPP ── */
+    #whatsapp-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 58px;
+      height: 58px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.45);
+      z-index: 1000;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #whatsapp-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 32px rgba(37,211,102,0.6);
+    }
+
+    #whatsapp-button img { width: 32px; }
+
+    /* ── ANIMAÇÕES ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .cta-group { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-outline { width: 100%; max-width: 300px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="badge">✦ Inscrições abertas</span>
+    <h1>Acampax</h1>
+    <p class="hero-sub">O acampamento que você estava esperando. Inscreva-se agora e garanta sua vaga.</p>
+    <div class="cta-group">
+      <a href="inscricao.html" class="btn-primary">Inscrever-se agora</a>
+      <a href="#sobre" class="btn-outline">Saiba mais</a>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section class="info-section" id="sobre">
+    <p class="section-label">o que você vai encontrar</p>
+    <h2 class="section-title">Tudo no Acampax</h2>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">⛺</div>
+        <h3>Experiência completa</h3>
+        <p>Atividades, alimentação e hospedagem tudo incluso na sua inscrição.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h3>Pagamento seguro</h3>
+        <p>Pagamos via Mercado Pago — Pix, cartão de crédito em até 12x ou boleto.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👨‍👩‍👧</div>
+        <h3>Autorização de menores</h3>
+        <p>Sistema automático de autorização para participantes menores de 18 anos.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3>LGPD garantida</h3>
+        <p>Seus dados são tratados com total segurança e em conformidade com a lei.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2024 Acampax · Todos os direitos reservados</p>
+  </footer>
+
+  <!-- WHATSAPP / CHATBOT -->
+  <div id="whatsapp-button" title="Falar com o chatbot">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" />
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

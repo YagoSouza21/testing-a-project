@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acampax — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --verde: #00e676;
+      --verde-escuro: #00b34a;
+      --preto: #080f0a;
+      --escuro: #0d1a12;
+      --card: #111e16;
+      --texto: #e8f5eb;
+      --cinza: #7a9480;
+      --borda: rgba(0,230,118,0.12);
+      --amarelo: #ffd740;
+      --erro: #ff5252;
+      --aprovado: #00e676;
+      --pendente: #ffd740;
+      --rejeitado: #ff5252;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--preto);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* LOGIN */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .login-box {
+      background: var(--card);
+      border: 1px solid var(--borda);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login-box h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--verde);
+      margin-bottom: 0.25rem;
+    }
+    .login-box p { color: var(--cinza); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .login-box input {
+      width: 100%;
+      background: var(--escuro);
+      border: 1.5px solid var(--borda);
+      border-radius: 10px;
+      color: var(--texto);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+    .login-box input:focus { border-color: var(--verde); }
+    .login-box button {
+      width: 100%;
+      background: var(--verde);
+      color: var(--preto);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-box button:hover { background: #fff; }
+    .login-erro { color: var(--erro); font-size: 0.85rem; margin-top: 0.75rem; display: none; }
+
+    /* LAYOUT */
+    .app { display: none; }
+    .app.visivel { display: block; }
+
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--borda);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--verde);
+    }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid var(--borda);
+      color: var(--cinza);
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { border-color: var(--erro); color: var(--erro); }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+    .stat-card .label { font-size: 0.75rem; color: var(--cinza); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .stat-card .valor {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--verde);
+      line-height: 1;
+    }
+    .stat-card.amarelo .valor { color: var(--amarelo); }
+    .stat-card.vermelho .valor { color: var(--erro); }
+    .stat-card.branco .valor { color: var(--texto); }
+
+    /* FILTROS */
+    .filtros {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .filtros select, .filtros input {
+      background: var(--card);
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      color: var(--texto);
+      font-family: 'DM Sans', sans-serif;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .filtros select:focus, .filtros input:focus { border-color: var(--verde); }
+    .filtros button {
+      background: var(--verde);
+      color: var(--preto);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    /* TABELA */
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      overflow: hidden;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: rgba(0,230,118,0.05);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cinza);
+      border-bottom: 1px solid var(--borda);
+    }
+    td {
+      padding: 0.85rem 1rem;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(0,230,118,0.03); }
+
+    .badge-status {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-aprovado { background: rgba(0,230,118,0.15); color: var(--aprovado); }
+    .badge-pendente { background: rgba(255,215,64,0.15); color: var(--pendente); }
+    .badge-rejeitado { background: rgba(255,82,82,0.15); color: var(--rejeitado); }
+
+    .badge-menor {
+      display: inline-block;
+      background: rgba(255,215,64,0.12);
+      color: var(--amarelo);
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      margin-left: 0.4rem;
+    }
+
+    .acoes { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-acao {
+      background: transparent;
+      border: 1px solid var(--borda);
+      color: var(--cinza);
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-acao:hover { border-color: var(--verde); color: var(--verde); }
+    .btn-acao.auth:hover { border-color: var(--amarelo); color: var(--amarelo); }
+
+    .loading { text-align: center; padding: 3rem; color: var(--cinza); }
+    .sem-dados { text-align: center; padding: 3rem; color: var(--cinza); font-size: 0.9rem; }
+
+    @media (max-width: 700px) {
+      header { padding: 1rem; }
+      main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <h1>Acampax</h1>
+    <p>Painel administrativo</p>
+    <input type="password" id="token-input" placeholder="Token de acesso" onkeydown="if(event.key==='Enter')login()" />
+    <button onclick="login()">Entrar</button>
+    <p class="login-erro" id="login-erro">Token inválido.</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <header>
+    <span class="logo">Acampax</span>
+    <div class="header-right">
+      <span style="color:var(--cinza);font-size:0.85rem;">Admin</span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- STATS -->
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card"><div class="label">Total inscritos</div><div class="valor" id="s-total">—</div></div>
+      <div class="stat-card"><div class="label">Aprovados</div><div class="valor" id="s-aprovados">—</div></div>
+      <div class="stat-card amarelo"><div class="label">Pendentes</div><div class="valor" id="s-pendentes">—</div></div>
+      <div class="stat-card vermelho"><div class="label">Rejeitados</div><div class="valor" id="s-rejeitados">—</div></div>
+      <div class="stat-card amarelo"><div class="label">Menores</div><div class="valor" id="s-menores">—</div></div>
+      <div class="stat-card branco"><div class="label">Receita</div><div class="valor" id="s-receita">—</div></div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filtros">
+      <select id="filtro-status" onchange="carregarParticipantes()">
+        <option value="">Todos os status</option>
+        <option value="aprovado">Aprovado</option>
+        <option value="pendente">Pendente</option>
+        <option value="rejeitado">Rejeitado</option>
+      </select>
+      <select id="filtro-menor" onchange="carregarParticipantes()">
+        <option value="">Todos</option>
+        <option value="true">Menores de idade</option>
+        <option value="false">Maiores de idade</option>
+      </select>
+      <input type="text" id="filtro-busca" placeholder="Buscar por nome..." oninput="filtrarTabela()" />
+      <button onclick="carregarParticipantes()">Atualizar</button>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Idade</th>
+            <th>Cidade</th>
+            <th>Pagamento</th>
+            <th>Docs</th>
+            <th>Inscrição</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-body">
+          <tr><td colspan="8" class="loading">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+  const API = 'http://localhost:5000/api';
+  let TOKEN = '';
+  let participantesData = [];
+
+  function login() {
+    TOKEN = document.getElementById('token-input').value.trim();
+    if (!TOKEN) return;
+    carregarStats();
+  }
+
+  function logout() {
+    TOKEN = '';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app').classList.remove('visivel');
+    document.getElementById('token-input').value = '';
+  }
+
+  async function carregarStats() {
+    try {
+      const res = await fetch(`${API}/admin/stats`, {
+        headers: { 'X-Admin-Token': TOKEN }
+      });
+      if (res.status === 401) {
+        document.getElementById('login-erro').style.display = 'block';
+        return;
+      }
+      const d = await res.json();
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').classList.add('visivel');
+      document.getElementById('login-erro').style.display = 'none';
+
+      document.getElementById('s-total').textContent = d.total_inscritos;
+      document.getElementById('s-aprovados').textContent = d.pagamentos_aprovados;
+      document.getElementById('s-pendentes').textContent = d.pagamentos_pendentes;
+      document.getElementById('s-rejeitados').textContent = d.pagamentos_rejeitados;
+      document.getElementById('s-menores').textContent = d.menores_de_idade;
+      document.getElementById('s-receita').textContent = 'R$ ' + Number(d.receita_total).toLocaleString('pt-BR', {minimumFractionDigits:2});
+
+      carregarParticipantes();
+    } catch(e) {
+      document.getElementById('login-erro').textContent = 'Erro de conexão com o servidor.';
+      document.getElementById('login-erro').style.display = 'block';
+    }
+  }
+
+  async function carregarParticipantes() {
+    const status = document.getElementById('filtro-status').value;
+    const menor = document.getElementById('filtro-menor').value;
+    let url = `${API}/admin/participantes?token=${TOKEN}`;
+    if (status) url += `&status=${status}`;
+    if (menor !== '') url += `&menor=${menor}`;
+
+    const tbody = document.getElementById('tabela-body');
+    tbody.innerHTML = '<tr><td colspan="8" class="loading">Carregando...</td></tr>';
+
+    try {
+      const res = await fetch(url, { headers: { 'X-Admin-Token': TOKEN } });
+      const data = await res.json();
+      participantesData = data.participantes || [];
+      renderTabela(participantesData);
+    } catch(e) {
+      tbody.innerHTML = '<tr><td colspan="8" class="sem-dados">Erro ao carregar dados.</td></tr>';
+    }
+  }
+
+  function renderTabela(lista) {
+    const tbody = document.getElementById('tabela-body');
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="sem-dados">Nenhum participante encontrado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = lista.map(p => `
+      <tr>
+        <td style="color:var(--cinza)">#${p.id}</td>
+        <td>
+          ${p.nome}
+          ${p.menor_idade ? '<span class="badge-menor">menor</span>' : ''}
+        </td>
+        <td>${p.idade}</td>
+        <td>${p.cidade || '—'}</td>
+        <td><span class="badge-status badge-${p.pagamento_status}">${p.pagamento_status}</span></td>
+        <td style="color:${(p.documento_frente && p.documento_verso) ? 'var(--verde)' : 'var(--cinza)'}">
+          ${p.documento_frente ? '✓ F' : '✗ F'} ${p.documento_verso ? '✓ V' : '✗ V'}
+        </td>
+        <td style="color:var(--cinza);font-size:0.8rem">${p.criado_em ? new Date(p.criado_em).toLocaleDateString('pt-BR') : '—'}</td>
+        <td>
+          <div class="acoes">
+            ${p.menor_idade ? `<a class="btn-acao auth" href="${API}/admin/gerar_pdf/${p.id}?token=${TOKEN}" target="_blank">📄 PDF</a>` : ''}
+            ${p.menor_idade && !p.autorizacao_entregue ? `<button class="btn-acao" onclick="marcarAutorizacao(${p.id}, this)">✓ Autorização</button>` : ''}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filtrarTabela() {
+    const busca = document.getElementById('filtro-busca').value.toLowerCase();
+    const filtrado = participantesData.filter(p => p.nome.toLowerCase().includes(busca));
+    renderTabela(filtrado);
+  }
+
+  async function marcarAutorizacao(id, btn) {
+    btn.disabled = true;
+    btn.textContent = '...';
+    try {
+      await fetch(`${API}/admin/autorizacao_entregue/${id}`, {
+        method: 'PUT',
+        headers: { 'X-Admin-Token': TOKEN }
+      });
+      btn.textContent = '✓ Entregue';
+      btn.style.color = 'var(--verde)';
+    } catch(e) {
+      btn.disabled = false;
+      btn.textContent = '✓ Autorização';
+    }
+  }
+</script>
+
+</body>
+</html>
